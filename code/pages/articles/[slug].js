@@ -43,7 +43,7 @@ export async function getStaticProps({params}){
     }
 }
 
-//here we get to pass psops that we can destructure to {article}
+//here we get to pass props that we can destructure to {article}
 export default function Article({article}) {
     console.log(article);
 
