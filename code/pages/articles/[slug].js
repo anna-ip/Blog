@@ -1,4 +1,7 @@
 import {createClient} from 'contentful'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; //This npm package that will render our content from contentful, se how its used further down
+import { BLOCKS } from '@contentful/rich-text-types';
+import Image from 'next/image'
 
 
 const client = createClient({
@@ -47,6 +50,23 @@ export default function Article({article}) {
     return( 
         <div>
             <h1> {article.fields.title}</h1>
+            {/* This npm package will help render the contentful content */}
+            <div>
+                {documentToReactComponents(article.fields.content, {
+                renderNode: {
+                    // a function that returns a react component <Image />
+                    [BLOCKS.EMBEDDED_ASSET]: (node) => (
+                        <Image 
+                            src={'https:' + node.data.target.fields.file.url} 
+                            //needs a width & height included in <Image/> it will be provided in the contentful data.
+                            width={node.data.target.fields.file.details.image.width} 
+                            height={node.data.target.fields.file.details.image.height}
+                        >
+                        </Image>
+                    )
+                }
+                })}
+            </div>
         </div>
     )
 }
